@@ -25,12 +25,26 @@ const loadStore = () =>{
     throw new Error('Not implemented');
 }
 
+const getTodos = (filter = Filters.All) => {
+    switch ( filter) {
+        case Filters.All:
+            return [...state.todos];
+        case Filters.Completed:
+            return state.todos.filter (todo => todo.done); // devolver el arreglo si done es true (todo => todo.done === true)
+        case Filters.Pending:
+            return state.todos.filter (todo => !todo.done); //(todo => todo.done === false)
+        default:
+            throw new Error(`Option ${ filter } is not valid.`);
+    }
+}
+
 /**
  * 
  * @param {String} descripcion 
  */
 const addTodo = (descripcion) => {
-    throw new Error('Not implemented');
+    if ( !descripcion ) throw new Error ('Description is requered');
+    state.todos.push( new Todo(descripcion));
 }
 
 /**
@@ -43,27 +57,33 @@ const toggleTodo =  ( todoId )  => {
 }
 
 const deleteTodo = ( todoId) => {
-    throw new Error('Not implemented');
+    state.todos = state.todos.filter ( todo => todo.id !== todoId);
 }
 
 const deleteCompleted = () => {
-    throw new Error('Not implemented');
+    state.todos = state.todos.filter ( todo => todo.done);
 }
 
+/**
+ * 
+ * @param {Filters} newFilter 
+ */
 const setFilter = (newFilter = Filters.All) => {
-    throw new Error('Not implemented');
-}
+    state.filter = newFilter;
+} 
 
 const getCurrentFilter = () => {
-    throw new Error('Not implemented');
+    return state.filter;
 }
 
 export default {
+    addTodo,
+    deleteCompleted,
+    deleteTodo,
+    getCurrentFilter,
+    getTodos,
     initStore,
     loadStore,
-    toggleTodo,
-    deleteTodo,
-    deleteCompleted,
     setFilter,
-    getCurrentFilter,
+    toggleTodo,
 }
